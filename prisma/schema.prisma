@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Courses {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  duration    Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  teacher     Teachers @relation(fields: [teacher_id], references: [id])
+  teacher_id  String   @unique
+
+  @@map("courses")
+}
+
+model Teachers {
+  id         String   @id @default(uuid())
+  name       String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Courses    Courses?
+
+  @@map("teachers")
+}
+
+model Modules {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("modules")
+}
